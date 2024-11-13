@@ -18,10 +18,8 @@ public class TaskService {
     public Task getTaskById(Long id) {
         return null;
     }
-    public Task saveTask(Task task, Long userId) {
-        return null;
-    }
-    public void deleteTask(Long id) {}
+    public Task saveTask(Task task) { return null; }
+    public boolean deleteTask(Long id) { return true;}
     public Task updateTask(Task task) {
         return null;
     }
