@@ -16,22 +16,14 @@ public class TaskService {
     UserRepositoryImpl userRepository;
 
     public Task getTaskById(Long id) {
-        return null;
+        return taskRepository.findById(id);
     }
-    public Task saveTask(Task task, Long userId) {
-        return null;
-    }
-    public void deleteTask(Long id) {}
-    public Task updateTask(Task task) {
-        return null;
-    }
+    public Task saveTask(Task task) {return taskRepository.save(task);}
+    public Task deleteTask(Task task) {return taskRepository.delete(task);}
+    public Task updateTask(Task task) {return taskRepository.update(task);}
 
-    public List<Task> getTasksByUser(Long userId) {
-        return null;
-    }
-    public Task changeTaskState(Long id){
-        return null;
-    }
+    public List<Task> getTasksByUser(Long userId) {return taskRepository.findByUser(userId);}
+    public Task changeTaskState(Task task){return taskRepository.changeState(task);}
 
     public List<Task> filterTaskByState(Long userId, Boolean state) {
         return null;

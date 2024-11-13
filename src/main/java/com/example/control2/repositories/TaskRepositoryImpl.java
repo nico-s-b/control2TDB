@@ -14,12 +14,20 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Task findById(Long id) {
-        return null;
+        try (org.sql2o.Connection con = sql2o.open()) {
+            return con.createQuery("SELECT * FROM tasks WHERE taskid = :id")
+                    .addParameter("taskid", id)
+                    .executeAndFetchFirst(Task.class);
+        }
     }
 
     @Override
     public List<Task> findByUser(Long userId) {
-        return List.of();
+        try (org.sql2o.Connection con = sql2o.open()) {
+            return con.createQuery("SELECT * FROM tasks WHERE studentid= :studentid")
+                    .addParameter("studentid",userId)
+                    .executeAndFetch(Task.class);
+        }
     }
 
     @Override
@@ -37,13 +45,36 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public void update(Task task) {
-
+    public Task update(Task task) {
+        try (org.sql2o.Connection con = sql2o.open()) {
+            return con.createQuery("UPDATE tasks SET titulo=: titulo, descripcion= :descripcion, deadline= :deadline, status= :status WHERE taskid= :taskid")
+                    .addParameter("taskid", task.getTaskId())
+                    .addParameter("titulo", task.getTitle())
+                    .addParameter("descripcion", task.getDescription())
+                    .addParameter("deadline", task.getDeadline())
+                    .addParameter("status", task.getStatus())
+                    .executeAndFetchFirst(Task.class);
+        }
     }
 
     @Override
-    public void delete(Task task) {
+    public Task delete(Task task) {
+        try (org.sql2o.Connection con = sql2o.open()) {
+            return con.createQuery("DELETE from tasks WHERE taskid= :taskid")
+                    .addParameter("taskid",task.getTaskId())
+                    .executeAndFetchFirst(Task.class);
+        }
+    }
 
+    @Override
+    //En query, 1=true, 0=false, null=unknown
+    //cambia a valor opuesto al que haya estado guardado
+    public Task changeState(Task task) {
+        try (org.sql2o.Connection con = sql2o.open()) {
+            return con.createQuery("UPDATE tasks SET status = NOT status WHERE taskid= :taskid")
+                    .addParameter("taskid", task.getTaskId())
+                    .executeAndFetchFirst(Task.class);
+        }
     }
 
     /**
