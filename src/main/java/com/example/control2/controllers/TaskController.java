@@ -38,22 +38,22 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        boolean isDeleted = taskService.deleteTask(id);
-        if (!isDeleted) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<Task> deleteTask(@RequestBody Task task) {
+        Task deletedTask = taskService.deleteTask(task);
+        if (deletedTask == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(deletedTask);
     }
 
-    @PutMapping("/{id}/state")
-    public ResponseEntity<Task> changeTaskState(@PathVariable Long id) {
-        Task task = taskService.changeTaskState(id);
-        if (task == null) {
+    @PutMapping("/state")
+    public ResponseEntity<Task> changeTaskState(@RequestBody Task task) {
+        Task updatedtask = taskService.changeTaskState(task);
+        if (updatedtask == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(task);
+        return ResponseEntity.ok(updatedtask);
     }
     
 }
