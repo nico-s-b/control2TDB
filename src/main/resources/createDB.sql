@@ -5,15 +5,16 @@
 CREATE TABLE IF NOT EXISTS public.students
 (
     studentid integer NOT NULL DEFAULT nextval('students_studentid_seq'::regclass),
-    username character varying[] COLLATE pg_catalog."default",
-    password character varying[] COLLATE pg_catalog."default",
+    username character varying COLLATE pg_catalog."default",
+    password character varying COLLATE pg_catalog."default",
     CONSTRAINT students_pkey PRIMARY KEY (studentid)
-    )
+)
 
     TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.students
     OWNER to postgres;
+
 
 -- Table: public.tasks
 
@@ -22,9 +23,9 @@ ALTER TABLE IF EXISTS public.students
 CREATE TABLE IF NOT EXISTS public.tasks
 (
     taskid integer NOT NULL DEFAULT nextval('tasks_taskid_seq'::regclass),
-    titulo character varying[] COLLATE pg_catalog."default",
-    descripcion character varying[] COLLATE pg_catalog."default",
-    fecha_vencimiento timestamp without time zone,
+    titulo character varying COLLATE pg_catalog."default",
+    descripcion character varying COLLATE pg_catalog."default",
+    deadline date,
     status boolean,
     studentid bigint,
     CONSTRAINT tasks_pkey PRIMARY KEY (taskid),
@@ -32,6 +33,7 @@ CREATE TABLE IF NOT EXISTS public.tasks
         REFERENCES public.students (studentid) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
+        NOT VALID
 )
 
     TABLESPACE pg_default;

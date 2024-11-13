@@ -46,6 +46,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     }
 
+    /**
     @Override
     public void findByState(Long userId, Boolean state) {
 
@@ -55,4 +56,5 @@ public class TaskRepositoryImpl implements TaskRepository {
     public void findByKeyword(Long userId, String keyword) {
 
     }
+    **/
 }
