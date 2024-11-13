@@ -25,7 +25,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public Task save(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            return con.createQuery("INSERT INTO tasks (taskid,titulo,descripcion,status,fecha_vencimiento,studentId) VALUES (:taskid, :titulo, :descripcion, :status, :deadline, :studentid)")
+            return con.createQuery("INSERT INTO tasks (taskid,titulo,descripcion,status,deadline,studentId) VALUES (:taskid, :titulo, :descripcion, :status, :deadline, :studentid)")
                     .addParameter("taskid",task.getTaskId())
                     .addParameter("titulo", task.getTitle())
                     .addParameter("descripcion", task.getDescription())
