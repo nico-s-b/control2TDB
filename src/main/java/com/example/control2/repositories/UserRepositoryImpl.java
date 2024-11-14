@@ -32,7 +32,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findUserById(Long id) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            return con.createQuery("SELECT * FROM users WHERE studentId = :id")
+            return con.createQuery("SELECT * FROM users WHERE userid = :id")
                     .addParameter("id", id)
                     .executeAndFetchFirst(User.class);
         }
@@ -41,8 +41,8 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void saveUser(User user) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            con.createQuery("INSERT INTO users (studentId, name, username, email) VALUES (:studentId, :name, :username, :email)")
-                    .addParameter("studentId", user.getStudentId())
+            con.createQuery("INSERT INTO users (userid, name, username, email) VALUES (:userId, :name, :username, :email)")
+                    .addParameter("userId", user.getUserId())
                     .addParameter("name", user.getName())
                     .addParameter("username", user.getUsername())
                     .addParameter("email", user.getEmail())
@@ -53,8 +53,8 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void deleteUser(User user) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            con.createQuery("DELETE FROM users WHERE studentId = :id")
-                    .addParameter("id", user.getStudentId())
+            con.createQuery("DELETE FROM users WHERE userid = :id")
+                    .addParameter("id", user.getUserId())
                     .executeUpdate();
         }
     }

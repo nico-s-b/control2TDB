@@ -26,10 +26,11 @@ public class TaskService {
     public Task changeTaskState(Task task){return taskRepository.changeState(task);}
 
     public List<Task> filterTaskByState(Long userId, Boolean state) {
-        return null;
+        return taskRepository.findByState(userId, state);
     }
     public List<Task> searchTaskByKeyword(Long userId, String keyword) {
-        return null;
+        return taskRepository.findByKeyword(userId, keyword);
     }
+
     public void sendNotification(Long userId) {}
 }

@@ -24,8 +24,8 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public List<Task> findByUser(Long userId) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            return con.createQuery("SELECT * FROM tasks WHERE studentid= :studentid")
-                    .addParameter("studentid",userId)
+            return con.createQuery("SELECT * FROM tasks WHERE userid= :userid")
+                    .addParameter("userid",userId)
                     .executeAndFetch(Task.class);
         }
     }
@@ -33,13 +33,13 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public Task save(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            return con.createQuery("INSERT INTO tasks (taskid,title,descripcion,status,deadline,studentId) VALUES (:taskid, :title, :description, :status, :deadline, :studentid)")
+            return con.createQuery("INSERT INTO tasks (taskid,title,description,status,deadline,userid) VALUES (:taskid, :title, :description, :status, :deadline, :userid)")
                     .addParameter("taskid",task.getTaskId())
                     .addParameter("title", task.getTitle())
                     .addParameter("description", task.getDescription())
                     .addParameter("status", task.getStatus())
                     .addParameter("deadline", task.getDeadline())
-                    .addParameter("studentId", task.getStudentId())
+                    .addParameter("userId", task.getUserId())
                     .executeAndFetchFirst(Task.class);
         }
     }
@@ -47,10 +47,10 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public Task update(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            return con.createQuery("UPDATE tasks SET titulo=: titulo, descripcion= :descripcion, deadline= :deadline, status= :status WHERE taskid= :taskid")
+            return con.createQuery("UPDATE tasks SET title=: title, description= :description, deadline= :deadline, status= :status WHERE taskid= :taskid")
                     .addParameter("taskid", task.getTaskId())
-                    .addParameter("titulo", task.getTitle())
-                    .addParameter("descripcion", task.getDescription())
+                    .addParameter("title", task.getTitle())
+                    .addParameter("description", task.getDescription())
                     .addParameter("deadline", task.getDeadline())
                     .addParameter("status", task.getStatus())
                     .executeAndFetchFirst(Task.class);
@@ -77,15 +77,33 @@ public class TaskRepositoryImpl implements TaskRepository {
         }
     }
 
-    /**
     @Override
-    public void findByState(Long userId, Boolean state) {
-
+    public List<Task> findByState(Long userId, Boolean state) {
+        try (org.sql2o.Connection con = sql2o.open()) {
+            return con.createQuery("SELECT * FROM tasks WHERE userid= :userid AND status= :state")
+                    .addParameter("userid",userId)
+                    .addParameter("state",state)
+                    .executeAndFetch(Task.class);
+        }
     }
 
     @Override
-    public void findByKeyword(Long userId, String keyword) {
-
+    public List<Task> findByKeyword(Long userId, String keyword) {
+        try (org.sql2o.Connection con = sql2o.open()) {
+            return con.createQuery("SELECT * FROM tasks WHERE userid= :userid AND (title LIKE :keyword OR description LIKE :keyword)")
+                    .addParameter("userid",userId)
+                    .addParameter("keyword", "%" + keyword + "%")
+                    .executeAndFetch(Task.class);
+        }
     }
-    **/
+
+    @Override
+    public Task findByFinishingDeadline(Long userId) {
+        try (org.sql2o.Connection con = sql2o.open()) {
+            //deadline - CURRENT_DATE < interval '1 day'
+            return con.createQuery("SELECT * FROM tasks WHERE userid= :userid AND DATEFIFF(day, CURRENT_DATE ,deadline) < 1")
+                    .addParameter("userid", userId)
+                    .executeAndFetchFirst(Task.class);
+        }
+    }
 }

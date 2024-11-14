@@ -10,7 +10,8 @@ public interface TaskRepository {
     Task save(Task task);
     Task update(Task task);
     Task delete(Task task);
-    //void findByState(Long userId, Boolean state);
-    //void findByKeyword(Long userId, String keyword);
+    List<Task> findByState(Long userId, Boolean state);
+    List<Task> findByKeyword(Long userId, String keyword);
     Task changeState(Task task);
+    Task findByFinishingDeadline(Long userId);
 }

@@ -32,7 +32,7 @@ public class TaskController {
     @GetMapping("/{userId}/tasks")
     public ResponseEntity<List<Task>> getTasksByUserId(@PathVariable Long userId) {
         List<Task> tasks = taskService.getTasksByUser(userId);
-        if (tasks == null) {
+        if (tasks.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(tasks);
@@ -55,5 +55,23 @@ public class TaskController {
         }
         return ResponseEntity.ok(updatedtask);
     }
-    
+
+    @GetMapping("/{userId}/tasks/status")
+    public ResponseEntity<List<Task>> getTasksByStatus(@PathVariable Long userId, @RequestParam Boolean status) {
+        List<Task> tasks = taskService.filterTaskByState(userId, status);
+        if (tasks.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(tasks);
+    }
+
+    @GetMapping("/{userId}/tasks/keyword")
+    public ResponseEntity<List<Task>> getTasksByKeyword(@PathVariable Long userId, @RequestParam String keyword) {
+        List<Task> tasks = taskService.searchTaskByKeyword(userId, keyword);
+        if (tasks.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(tasks);
+    }
+
 }

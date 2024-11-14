@@ -57,6 +57,7 @@ public class AuthController {
         newUser.setPassword(passwordEncoder.encode(registerDto.getPassword())); // Encriptar la contraseña
         newUser.setRol(registerDto.getRol());
         newUser.setEmail(registerDto.getEmail());
+        newUser.setName(registerDto.getName());
 
         usuarioRepository.saveUser(newUser);
 

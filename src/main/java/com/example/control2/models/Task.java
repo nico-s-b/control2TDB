@@ -17,5 +17,5 @@ public class Task {
     //false = NO completo, true = completo
     private Boolean status;
     private ZonedDateTime deadline;
-    private Long studentId;
+    private Long userId;
 }
