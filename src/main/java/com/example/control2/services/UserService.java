@@ -13,9 +13,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-    @Qualifier("notifierRepository")
+
     @Autowired
-    private NotifierRepository notifierRepository;
+    private NotifierService notifierService;
 
     public User getUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
@@ -30,20 +30,13 @@ public class UserService {
     }
 
     public void createUser(User user) {
-        User newuser = userRepository.saveUser(user);
-
-        Notifier notifier = new Notifier();
-        notifier.setUserId(newuser.getUserId());
-        notifier.setEnabled(false);
-        notifier.setAmount(0);
-        notifier.setTimeunit("day");
-
-        notifierRepository.save(notifier);
+        userRepository.saveUser(user);
+        notifierService.create(user.getUserId());
     }
 
     public void removeUser(User user) {
-        Notifier notifier = notifierRepository.findByUser(user.getUserId());
-        notifierRepository.delete(notifier);
+        Notifier notifier = notifierService.findByUserId(user.getUserId());
+        notifierService.delete(notifier);
         userRepository.deleteUser(user);
     }
 }

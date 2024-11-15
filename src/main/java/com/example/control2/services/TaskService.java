@@ -1,19 +1,22 @@
 package com.example.control2.services;
 
+import com.example.control2.models.Notifier;
 import com.example.control2.models.Task;
 import com.example.control2.repositories.TaskRepositoryImpl;
 import com.example.control2.repositories.UserRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
 public class TaskService {
     @Autowired
     TaskRepositoryImpl taskRepository;
+
     @Autowired
-    UserRepositoryImpl userRepository;
+    NotifierService notifierService;
 
     public Task getTaskById(Long id) {
         return taskRepository.findById(id);
@@ -32,7 +35,9 @@ public class TaskService {
         return taskRepository.findByKeyword(userId, keyword);
     }
 
-    public Task taskNotification(Long userId) {
-        return taskRepository.findByFinishingDeadline(userId);
+    public List<Task> getTasktoNotify(Long userId) {
+        Notifier notifier = notifierService.findByUserId(userId);
+        int hoursInterval = notifierService.getNotificationHoursInterval(notifier);
+        return taskRepository.findByFinishingDeadline(userId, hoursInterval);
     }
 }

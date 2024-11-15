@@ -3,6 +3,7 @@ package com.example.control2.repositories;
 import com.example.control2.models.Task;
 import org.springframework.stereotype.Repository;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Repository
@@ -15,5 +16,5 @@ public interface TaskRepository {
     List<Task> findByState(Long userId, Boolean state);
     List<Task> findByKeyword(Long userId, String keyword);
     Task changeState(Task task);
-    Task findByFinishingDeadline(Long userId);
+    List<Task> findByFinishingDeadline(Long userId, int hours);
 }

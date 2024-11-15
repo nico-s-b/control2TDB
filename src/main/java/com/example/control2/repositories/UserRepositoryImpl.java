@@ -41,8 +41,8 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User saveUser(User user) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            con.createQuery("INSERT INTO users (userid, name, username, email) VALUES (:userId, :name, :username, :email)")
-                    .addParameter("userId", user.getUserId())
+            con.createQuery("INSERT INTO users (userid, name, username, email) VALUES (:userid, :name, :username, :email)")
+                    .addParameter("userid", user.getUserId())
                     .addParameter("name", user.getName())
                     .addParameter("username", user.getUsername())
                     .addParameter("email", user.getEmail())

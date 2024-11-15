@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Repository
@@ -98,20 +99,15 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public Task findByFinishingDeadline(Long userId) {
+    public List<Task> findByFinishingDeadline(Long userId, int hours) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery(
                     "SELECT * FROM tasks t " +
-                            "JOIN notifiers n ON t.userid = n.userid " +
                             "WHERE t.userid = :userid AND " +
-                            "CASE " +
-                            "    WHEN n.timeunit = 'day' THEN DATE_PART('day', t.deadline - CURRENT_DATE) < n.amount " +
-                            "    WHEN n.timeunit = 'hour' THEN (EXTRACT(EPOCH FROM (t.deadline - CURRENT_TIMESTAMP)) / 3600) < n.amount " +
-                            "    WHEN n.timeunit = 'week' THEN (DATE_PART('day', t.deadline - CURRENT_DATE) / 7) < n.amount " +
-                            "    ELSE false " +
-                            "END")
+                            "CURRENT_DATE < t.deadline - interval ':hours hours'")
                     .addParameter("userid", userId)
-                    .executeAndFetchFirst(Task.class);
+                    .addParameter("hours", hours)
+                    .executeAndFetch(Task.class);
         }
     }
 }
