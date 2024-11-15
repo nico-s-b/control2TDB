@@ -32,5 +32,7 @@ public class TaskService {
         return taskRepository.findByKeyword(userId, keyword);
     }
 
-    public void sendNotification(Long userId) {}
+    public Task taskNotification(Long userId) {
+        return taskRepository.findByFinishingDeadline(userId);
+    }
 }

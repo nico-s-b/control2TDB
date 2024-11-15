@@ -39,7 +39,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void saveUser(User user) {
+    public User saveUser(User user) {
         try (org.sql2o.Connection con = sql2o.open()) {
             con.createQuery("INSERT INTO users (userid, name, username, email) VALUES (:userId, :name, :username, :email)")
                     .addParameter("userId", user.getUserId())
@@ -48,6 +48,7 @@ public class UserRepositoryImpl implements UserRepository {
                     .addParameter("email", user.getEmail())
                     .executeUpdate();
         }
+        return user;
     }
 
     @Override

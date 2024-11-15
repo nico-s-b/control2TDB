@@ -1,6 +1,6 @@
--- Table: public.students
+-- Table: public.users
 
--- DROP TABLE IF EXISTS public.students;
+-- DROP TABLE IF EXISTS public.users;
 
 CREATE TABLE IF NOT EXISTS public.users
 (
@@ -15,6 +15,27 @@ CREATE TABLE IF NOT EXISTS public.users
     TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.users
+    OWNER to postgres;
+
+
+-- Table: public.notifiers
+
+-- DROP TABLE IF EXISTS public.notifiers;
+
+CREATE TABLE IF NOT EXISTS public.notifiers
+(
+    userid integer NOT NULL,
+    timeunit character varying COLLATE pg_catalog."default",
+    enabled boolean,
+    amount integer,
+    CONSTRAINT notifiers_pkey PRIMARY KEY (userid),
+    CONSTRAINT fk_user FOREIGN KEY (userid) REFERENCES public.users (userid) ON DELETE CASCADE,
+    CONSTRAINT chk_timeunit CHECK (timeunit IN ('day', 'hour', 'week', 'month'))
+    )
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.notifiers
     OWNER to postgres;
 
 

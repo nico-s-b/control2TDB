@@ -100,8 +100,16 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public Task findByFinishingDeadline(Long userId) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            //deadline - CURRENT_DATE < interval '1 day'
-            return con.createQuery("SELECT * FROM tasks WHERE userid= :userid AND DATEFIFF(day, CURRENT_DATE ,deadline) < 1")
+            return con.createQuery(
+                    "SELECT * FROM tasks t " +
+                            "JOIN notifiers n ON t.userid = n.userid " +
+                            "WHERE t.userid = :userid AND " +
+                            "CASE " +
+                            "    WHEN n.timeunit = 'day' THEN DATE_PART('day', t.deadline - CURRENT_DATE) < n.amount " +
+                            "    WHEN n.timeunit = 'hour' THEN (EXTRACT(EPOCH FROM (t.deadline - CURRENT_TIMESTAMP)) / 3600) < n.amount " +
+                            "    WHEN n.timeunit = 'week' THEN (DATE_PART('day', t.deadline - CURRENT_DATE) / 7) < n.amount " +
+                            "    ELSE false " +
+                            "END")
                     .addParameter("userid", userId)
                     .executeAndFetchFirst(Task.class);
         }
