@@ -32,11 +32,9 @@ public class TaskController {
     @GetMapping("/{userId}/tasks")
     public ResponseEntity<List<Task>> getTasksByUserId(@PathVariable Long userId) {
         List<Task> tasks = taskService.getTasksByUser(userId);
-        if (tasks.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(tasks);
     }
+
 
     @DeleteMapping("/delete")
     public ResponseEntity<Task> deleteTask(@RequestBody Task task) {
