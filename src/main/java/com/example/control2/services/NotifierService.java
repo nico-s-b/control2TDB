@@ -14,8 +14,8 @@ public class NotifierService {
     @Autowired
     NotifierRepository notifierRepository;
 
-    public Notifier save(Notifier notifier) {
-        return notifierRepository.save(notifier);
+    public void save(Notifier notifier) {
+        notifierRepository.save(notifier);
     }
 
     public Notifier findByUserId(Long id) {
@@ -26,14 +26,14 @@ public class NotifierService {
         notifierRepository.delete(notifier);
     }
 
-    public Notifier create(Long userid){
+    public void create(Long userid){
         Notifier notifier = new Notifier();
-        notifier.setUserId(userid);
+        notifier.setUserid(userid);
         notifier.setEnabled(false);
         notifier.setAmount(0);
         notifier.setTimeunit("day");
 
-        return notifierRepository.save(notifier);
+        notifierRepository.save(notifier);
     }
 
     public int getNotificationHoursInterval(Notifier notifier) {

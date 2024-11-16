@@ -1,0 +1,24 @@
+### Registro de usuario
+POST http://localhost:8090/auth/register
+Content-Type: application/json
+
+{
+  "name": "Juan Perez",
+  "username": "juan123",
+  "password": "password123",
+  "email": "juan@example.com",
+  "rol": "USER"
+}
+
+### Login del usuario registrado
+POST http://localhost:8090/auth/login
+Content-Type: application/json
+
+{
+  "username": "juan123",
+  "password": "password123"
+}
+
+### Probar una ruta protegida con el JWT
+GET http://localhost:8090/establecimientos/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdWFuMTIzIiwiaXNzIjoidGJkIiwiZXhwIjoxNzMxNzIwMTQ5LCJpYXQiOjE3MzE3MTk4NDl9.xMFs1jGifhZKKhKSsucME65T1x_3OLUIjlH9XFUO5sw

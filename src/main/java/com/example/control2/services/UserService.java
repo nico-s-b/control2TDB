@@ -30,12 +30,12 @@ public class UserService {
     }
 
     public void createUser(User user) {
-        userRepository.saveUser(user);
-        notifierService.create(user.getUserId());
+        User createdUser = userRepository.saveUser(user);
+        notifierService.create(createdUser.getUserid());
     }
 
     public void removeUser(User user) {
-        Notifier notifier = notifierService.findByUserId(user.getUserId());
+        Notifier notifier = notifierService.findByUserId(user.getUserid());
         notifierService.delete(notifier);
         userRepository.deleteUser(user);
     }

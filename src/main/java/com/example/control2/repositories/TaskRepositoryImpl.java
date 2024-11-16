@@ -35,12 +35,12 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Task save(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery("INSERT INTO tasks (taskid,title,description,status,deadline,userid) VALUES (:taskid, :title, :description, :status, :deadline, :userid)")
-                    .addParameter("taskid",task.getTaskId())
+                    .addParameter("taskid",task.getTaskid())
                     .addParameter("title", task.getTitle())
                     .addParameter("description", task.getDescription())
                     .addParameter("status", task.getStatus())
                     .addParameter("deadline", task.getDeadline())
-                    .addParameter("userId", task.getUserId())
+                    .addParameter("userId", task.getUserid())
                     .executeAndFetchFirst(Task.class);
         }
     }
@@ -49,7 +49,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Task update(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery("UPDATE tasks SET title=: title, description= :description, deadline= :deadline, status= :status WHERE taskid= :taskid")
-                    .addParameter("taskid", task.getTaskId())
+                    .addParameter("taskid", task.getTaskid())
                     .addParameter("title", task.getTitle())
                     .addParameter("description", task.getDescription())
                     .addParameter("deadline", task.getDeadline())
@@ -62,7 +62,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Task delete(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery("DELETE from tasks WHERE taskid= :taskid")
-                    .addParameter("taskid",task.getTaskId())
+                    .addParameter("taskid",task.getTaskid())
                     .executeAndFetchFirst(Task.class);
         }
     }
@@ -73,7 +73,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Task changeState(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery("UPDATE tasks SET status = NOT status WHERE taskid= :taskid")
-                    .addParameter("taskid", task.getTaskId())
+                    .addParameter("taskid", task.getTaskid())
                     .executeAndFetchFirst(Task.class);
         }
     }

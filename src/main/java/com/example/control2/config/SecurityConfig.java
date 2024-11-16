@@ -31,6 +31,7 @@ public class SecurityConfig {
                         .requestMatchers("/establecimientos/").hasAnyRole("MOD") // Solo los ADMIN pueden acceder a /establecimientos/**
                         .requestMatchers("/establecimientos/**").hasAnyRole("ADMIN") // Solo los ADMIN pueden acceder a /establecimientos/**
                         .requestMatchers("/auth/**").permitAll() // Todos pueden acceder a /auth/**
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated() // Todas las demás rutas requieren autenticación
                 )
                 .sessionManagement(session -> session // Configura la política de creación de sesiones

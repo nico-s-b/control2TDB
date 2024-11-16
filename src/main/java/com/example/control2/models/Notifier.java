@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notifier {
-    private Long userId;
+    private Long userid;
     private String timeunit;
     private int amount;
     private boolean enabled;

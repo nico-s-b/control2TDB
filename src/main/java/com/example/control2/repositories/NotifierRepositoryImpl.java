@@ -23,14 +23,14 @@ public class NotifierRepositoryImpl implements NotifierRepository{
     }
 
     @Override
-    public Notifier save(Notifier notifier) {
+    public void save(Notifier notifier) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            return con.createQuery("INSERT INTO tasks (userid,amount,timeunit,enabled) VALUES (:userid, :amount, :timeunit, :enabled)")
-                    .addParameter("userid",notifier.getUserId())
+            con.createQuery("INSERT INTO notifiers (userid, amount, timeunit, enabled) VALUES (:userid, :amount, :timeunit, :enabled)")
+                    .addParameter("userid", notifier.getUserid())
                     .addParameter("amount", notifier.getAmount())
                     .addParameter("timeunit", notifier.getTimeunit())
                     .addParameter("enabled", notifier.isEnabled())
-                    .executeAndFetchFirst(Notifier.class);
+                    .executeUpdate();
         }
     }
 
@@ -38,7 +38,7 @@ public class NotifierRepositoryImpl implements NotifierRepository{
     public Notifier delete(Notifier notifier) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery("DELETE from notifiers WHERE userid= :userid")
-                    .addParameter("userid",notifier.getUserId())
+                    .addParameter("userid",notifier.getUserid())
                     .executeAndFetchFirst(Notifier.class);
         }
     }
