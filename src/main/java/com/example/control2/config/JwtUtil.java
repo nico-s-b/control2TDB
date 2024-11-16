@@ -22,22 +22,22 @@ public class JwtUtil {
                 .withSubject(username)
                 .withIssuer("tbd")
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5)) // Modifica este valor para cambiar la duración del token
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(60)) // Modifica este valor para cambiar la duración del token
                 ).sign(ALGORITHM);
 
     }
 
     // Este metodo verifica si un JWT es válido
-    public boolean isValid(String jwt){
+    public boolean isValid(String jwt) {
         try {
-            JWT.require(ALGORITHM)
-                    .build()
-                    .verify(jwt);
+            JWT.require(ALGORITHM).build().verify(jwt);
             return true;
         } catch (JWTVerificationException e) {
+            System.out.println("Token inválido: " + jwt);
             return false;
         }
     }
+
 
     // Este metodo extrae el nombre de usuario de un JWT
     public String getUsername(String jwt){

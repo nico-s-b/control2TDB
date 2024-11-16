@@ -2,7 +2,6 @@ package com.example.control2.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -23,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
 
-    public SecurityConfig(@Lazy JwtFilter jwtFilter) {
+    public SecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
 
@@ -33,8 +32,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // Deshabilita CSRF por ser una API
                 .cors((cors) -> {}) // Habilita CORS
                 .authorizeHttpRequests(authorize -> authorize // Configura las rutas que requieren autenticación
-                        .requestMatchers("/establecimientos/").hasAnyRole("MOD") // Solo los ADMIN pueden acceder a /establecimientos/**
-                        .requestMatchers("/establecimientos/**").hasAnyRole("ADMIN") // Solo los ADMIN pueden acceder a /establecimientos/**
+                        //.requestMatchers("/api/v1/").hasAnyRole("MOD") // Solo los ADMIN pueden acceder
+                        //.requestMatchers("/api/v1/**").hasAnyRole("ADMIN") // Solo los ADMIN pueden acceder
                         .requestMatchers("/auth/**").permitAll() // Todos pueden acceder a /auth/**
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated() // Todas las demás rutas requieren autenticación
@@ -56,7 +55,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     } // Configura el encriptador de contraseñas
 
-    @Bean
+    /*@Bean
     public UserDetailsService userDetailsService() {
         UserDetails user = User.builder()
                 .username("admin")
@@ -71,5 +70,5 @@ public class SecurityConfig {
                 .build();
 
         return new InMemoryUserDetailsManager(user, modUser);
-    }
+    }*/
 }

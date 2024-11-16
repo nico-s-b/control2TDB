@@ -38,6 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        System.out.println("Omitimos las rutas publicas");
 
         // 1. Validar que sea un Header Authorization
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -45,6 +46,7 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        System.out.println("Validamos la autorizacion");
 
         // 2. Validar que el token sea válido
         String jwt = authHeader.split(" ")[1].trim();
@@ -53,18 +55,22 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        System.out.println("Validamos que el token sea valido");
 
         // 3. Cargar el usuario del UserDetailsService
         String username = this.jwtUtil.getUsername(jwt);
         User user = (User) this.userDetailsService.loadUserByUsername(username);
+        System.out.println("Termino de cargar el usuario");
 
         // 4. Cargar al usuario en el contexto de seguridad
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 user.getUsername(), user.getPassword(), user.getAuthorities());
+        System.out.println("1 El token de autenticacion es: " + authenticationToken);
 
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        System.out.println("2 El token de autenticacion es: " + authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        System.out.println(authenticationToken);
+        System.out.println("3 El token de autenticacion es: " + authenticationToken);
         filterChain.doFilter(request, response);
     }
 
