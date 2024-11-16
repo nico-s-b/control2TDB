@@ -26,6 +26,9 @@ public class CorsConfig {
         // Por lo general se coloca "*", que significa que se pueden enviar todos los headers
         corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
 
+        // Permite que el Frontend accede al Authorization para el token
+        corsConfiguration.setExposedHeaders(Arrays.asList("Authorization"));
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
 
