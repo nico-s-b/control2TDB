@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Notifier {
     private Long userid;
-    private String name;
-    private String password;
-    private String username;
-    private String email;
-    private String rol;
+    private String timeunit;
+    private int amount;
+    private boolean enabled;
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Repository
@@ -34,12 +35,12 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Task save(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery("INSERT INTO tasks (taskid,title,description,status,deadline,userid) VALUES (:taskid, :title, :description, :status, :deadline, :userid)")
-                    .addParameter("taskid",task.getTaskId())
+                    .addParameter("taskid",task.getTaskid())
                     .addParameter("title", task.getTitle())
                     .addParameter("description", task.getDescription())
                     .addParameter("status", task.getStatus())
                     .addParameter("deadline", task.getDeadline())
-                    .addParameter("userId", task.getUserId())
+                    .addParameter("userId", task.getUserid())
                     .executeAndFetchFirst(Task.class);
         }
     }
@@ -48,7 +49,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Task update(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery("UPDATE tasks SET title=: title, description= :description, deadline= :deadline, status= :status WHERE taskid= :taskid")
-                    .addParameter("taskid", task.getTaskId())
+                    .addParameter("taskid", task.getTaskid())
                     .addParameter("title", task.getTitle())
                     .addParameter("description", task.getDescription())
                     .addParameter("deadline", task.getDeadline())
@@ -61,7 +62,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Task delete(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery("DELETE from tasks WHERE taskid= :taskid")
-                    .addParameter("taskid",task.getTaskId())
+                    .addParameter("taskid",task.getTaskid())
                     .executeAndFetchFirst(Task.class);
         }
     }
@@ -72,7 +73,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Task changeState(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery("UPDATE tasks SET status = NOT status WHERE taskid= :taskid")
-                    .addParameter("taskid", task.getTaskId())
+                    .addParameter("taskid", task.getTaskid())
                     .executeAndFetchFirst(Task.class);
         }
     }
@@ -98,12 +99,15 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public Task findByFinishingDeadline(Long userId) {
+    public List<Task> findByFinishingDeadline(Long userId, int hours) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            //deadline - CURRENT_DATE < interval '1 day'
-            return con.createQuery("SELECT * FROM tasks WHERE userid= :userid AND DATEFIFF(day, CURRENT_DATE ,deadline) < 1")
+            return con.createQuery(
+                    "SELECT * FROM tasks t " +
+                            "WHERE t.userid = :userid AND " +
+                            "CURRENT_DATE < t.deadline - interval ':hours hours'")
                     .addParameter("userid", userId)
-                    .executeAndFetchFirst(Task.class);
+                    .addParameter("hours", hours)
+                    .executeAndFetch(Task.class);
         }
     }
 }

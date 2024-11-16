@@ -31,6 +31,14 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
+        // 0. Omitir rutas públicas
+        String requestURI = request.getRequestURI();
+        if (isPublicRoute(requestURI)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 1. Validar que sea un Header Authorization
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || authHeader.isEmpty() || !authHeader.startsWith("Bearer ")) {
@@ -58,5 +66,9 @@ public class JwtFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         System.out.println(authenticationToken);
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isPublicRoute(String requestURI) {
+        return requestURI.startsWith("/auth/"); // Agregar aquí más rutas públicas si es necesario
     }
 }

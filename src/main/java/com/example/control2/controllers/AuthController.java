@@ -5,6 +5,8 @@ import com.example.control2.dto.LoginDto;
 import com.example.control2.dto.RegisterDto;
 import com.example.control2.models.User;
 import com.example.control2.repositories.UserRepository;
+import com.example.control2.services.CustomUserDetailsService;
+import com.example.control2.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,15 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
-    private final UserRepository usuarioRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserService userService, PasswordEncoder passwordEncoder, CustomUserDetailsService customUserDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        this.usuarioRepository = usuarioRepository;
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @PostMapping("/login")
@@ -59,8 +63,14 @@ public class AuthController {
         newUser.setEmail(registerDto.getEmail());
         newUser.setName(registerDto.getName());
 
-        usuarioRepository.saveUser(newUser);
+        userService.createUser(newUser);
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/test")
+    public ResponseEntity<String> testEndpoint() {
+        return ResponseEntity.ok("Access granted");
+    }
+
 }

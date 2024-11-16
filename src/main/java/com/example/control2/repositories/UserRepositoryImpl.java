@@ -39,22 +39,41 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void saveUser(User user) {
-        try (org.sql2o.Connection con = sql2o.open()) {
-            con.createQuery("INSERT INTO users (userid, name, username, email) VALUES (:userId, :name, :username, :email)")
-                    .addParameter("userId", user.getUserId())
+    public User saveUser(User user) {
+        try (org.sql2o.Connection con = sql2o.beginTransaction()) {
+            con.createQuery(
+                            "INSERT INTO users (name, username, email, password, rol) " +
+                                    "VALUES (:name, :username, :email, :password, :rol)")
                     .addParameter("name", user.getName())
                     .addParameter("username", user.getUsername())
                     .addParameter("email", user.getEmail())
+                    .addParameter("password", user.getPassword())
+                    .addParameter("rol", user.getRol())
                     .executeUpdate();
+
+            Long generatedId = con.createQuery("SELECT currval('users_userid_seq')")
+                    .executeScalar(Long.class);
+
+            user.setUserid(generatedId);
+
+            con.commit();
+
+            return user;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al guardar el usuario", e);
         }
     }
+
+
+
+
+
 
     @Override
     public void deleteUser(User user) {
         try (org.sql2o.Connection con = sql2o.open()) {
             con.createQuery("DELETE FROM users WHERE userid = :id")
-                    .addParameter("id", user.getUserId())
+                    .addParameter("id", user.getUserid())
                     .executeUpdate();
         }
     }

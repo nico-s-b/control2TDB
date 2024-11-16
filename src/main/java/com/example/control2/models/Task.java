@@ -11,11 +11,11 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class Task {
 
-    private Long taskId;
+    private Long taskid;
     private String title;
     private String description;
     //false = NO completo, true = completo
     private Boolean status;
     private ZonedDateTime deadline;
-    private Long userId;
+    private Long userid;
 }
