@@ -35,6 +35,17 @@ public class NotifierRepositoryImpl implements NotifierRepository{
     }
 
     @Override
+    public void update(Notifier notifier) {
+        try (org.sql2o.Connection con = sql2o.open()) {
+            con.createQuery("INSERT INTO notifiers (amount, timeunit, enabled) VALUES (:amount, :timeunit, :enabled)")
+                    .addParameter("amount", notifier.getAmount())
+                    .addParameter("timeunit", notifier.getTimeunit())
+                    .addParameter("enabled", notifier.isEnabled())
+                    .executeUpdate();
+        }
+    }
+
+    @Override
     public Notifier delete(Notifier notifier) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery("DELETE from notifiers WHERE userid= :userid")

@@ -14,8 +14,8 @@ public class NotifierService {
     @Autowired
     NotifierRepository notifierRepository;
 
-    public void save(Notifier notifier) {
-        notifierRepository.save(notifier);
+    public void update(Notifier notifier) {
+        notifierRepository.update(notifier);
     }
 
     public Notifier findByUserId(Long id) {

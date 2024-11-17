@@ -3,16 +3,13 @@ package com.example.control2.services;
 import com.example.control2.models.User;
 import com.example.control2.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
     @Mock

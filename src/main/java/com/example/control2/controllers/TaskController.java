@@ -72,7 +72,7 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
-    @GetMapping("/{userId}/task/notify")
+    @GetMapping("/{userId}/tasks/notify")
     public ResponseEntity<List<Task>> getTasksToNotify(@PathVariable Long userId) {
         List<Task> task = taskService.getTasktoNotify(userId);
         if (task.isEmpty()) {
