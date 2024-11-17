@@ -65,10 +65,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
 
-
-
-
-
     @Override
     public void deleteUser(User user) {
         try (org.sql2o.Connection con = sql2o.open()) {

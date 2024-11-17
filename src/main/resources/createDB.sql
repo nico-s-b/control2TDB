@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS public.tasks
     taskid BIGSERIAL PRIMARY KEY,
     title character varying COLLATE pg_catalog."default",
     description character varying COLLATE pg_catalog."default",
-    deadline date,
+    deadline TIMESTAMP,
     status boolean,
     userid BIGINT,
     CONSTRAINT userid FOREIGN KEY (userid)
