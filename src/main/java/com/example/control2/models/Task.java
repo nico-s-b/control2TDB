@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 @Data
@@ -16,6 +17,6 @@ public class Task {
     private String description;
     //false = NO completo, true = completo
     private Boolean status;
-    private ZonedDateTime deadline;
+    private LocalDate deadline;
     private Long userid;
 }

@@ -48,11 +48,11 @@ public class AuthController {
             String jwt = this.jwtUtil.create(loginDto.getUsername());
 
             User user = userService.getUserByUsername(loginDto.getUsername()); // Asume que el usuario es una instancia de org.springframework.security.core.userdetails.User
-            Long userId = user.getUserid();
+            Long userid = user.getUserid();
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, jwt)
-                    .body(userId);
+                    .body(userid);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
