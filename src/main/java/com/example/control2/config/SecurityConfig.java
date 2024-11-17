@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize // Configura las rutas que requieren autenticación
                         //.requestMatchers("/api/v1/").hasAnyRole("MOD") // Solo los ADMIN pueden acceder
                         //.requestMatchers("/api/v1/**").hasAnyRole("ADMIN") // Solo los ADMIN pueden acceder
+                        .requestMatchers("/api/v1/tasks/").hasAnyRole("USER", "ADMIN", "MOD")
                         .requestMatchers("/auth/**").permitAll() // Todos pueden acceder a /auth/**
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated() // Todas las demás rutas requieren autenticación

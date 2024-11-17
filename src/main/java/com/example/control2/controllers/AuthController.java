@@ -4,7 +4,6 @@ import com.example.control2.config.JwtUtil;
 import com.example.control2.dto.LoginDto;
 import com.example.control2.dto.RegisterDto;
 import com.example.control2.models.User;
-import com.example.control2.repositories.UserRepository;
 import com.example.control2.services.CustomUserDetailsService;
 import com.example.control2.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<Long> login(@RequestBody LoginDto loginDto) {
         try { // Intentar autenticar al usuario
             UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
             Authentication authentication = authenticationManager.authenticate(login);
@@ -48,7 +47,12 @@ public class AuthController {
             // Si la autenticación fue exitosa, crear un JWT y devolverlo en el header
             String jwt = this.jwtUtil.create(loginDto.getUsername());
 
-            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
+            User user = userService.getUserByUsername(loginDto.getUsername()); // Asume que el usuario es una instancia de org.springframework.security.core.userdetails.User
+            Long userId = user.getUserid();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.AUTHORIZATION, jwt)
+                    .body(userId);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

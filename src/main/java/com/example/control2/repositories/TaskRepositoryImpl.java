@@ -40,7 +40,7 @@ public class TaskRepositoryImpl implements TaskRepository {
                     .addParameter("description", task.getDescription())
                     .addParameter("status", task.getStatus())
                     .addParameter("deadline", task.getDeadline())
-                    .addParameter("userId", task.getUserid())
+                    .addParameter("userid", task.getUserid())
                     .executeAndFetchFirst(Task.class);
         }
     }
