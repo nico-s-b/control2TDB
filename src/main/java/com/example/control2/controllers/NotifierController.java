@@ -18,4 +18,13 @@ public class NotifierController {
         return ResponseEntity.ok(notifier);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Notifier> getNotifierByUserid(@PathVariable Long id){
+        Notifier notifier = notifierService.findByUserId(id);
+        if (notifier == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(notifier);
+    }
+
 }

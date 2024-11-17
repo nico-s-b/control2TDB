@@ -46,12 +46,12 @@ class TaskServiceTest {
         Task task1 = new Task();
         task1.setTaskid(1L);
         task1.setTitle("Task 1");
-        task1.setDeadline(LocalDate.now().plusDays(1));
+        task1.setDeadline(LocalDate.now().plusDays(1).atStartOfDay());
 
         Task task2 = new Task();
         task2.setTaskid(2L);
         task2.setTitle("Task 2");
-        task2.setDeadline(LocalDate.now().plusDays(2));
+        task2.setDeadline(LocalDate.now().plusDays(2).atStartOfDay());
 
         List<Task> expectedTasks = Arrays.asList(task1, task2);
 
