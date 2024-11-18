@@ -81,17 +81,6 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    //En query, 1=true, 0=false, null=unknown
-    //cambia a valor opuesto al que haya estado guardado
-    public Task changeState(Task task) {
-        try (org.sql2o.Connection con = sql2o.open()) {
-            return con.createQuery("UPDATE tasks SET status = NOT status WHERE taskid= :taskid")
-                    .addParameter("taskid", task.getTaskid())
-                    .executeAndFetchFirst(Task.class);
-        }
-    }
-
-    @Override
     public List<Task> findByState(Long userid, Boolean state) {
         try (org.sql2o.Connection con = sql2o.open()) {
             return con.createQuery("SELECT * FROM tasks WHERE userid= :userid AND status= :state")
@@ -114,13 +103,15 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public List<Task> findByFinishingDeadline(Long userid, int hours) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            return con.createQuery(
-                    "SELECT * FROM tasks t " +
-                            "WHERE t.userid = :userid AND " +
-                            "CURRENT_DATE < t.deadline - interval ':hours hours'")
+            String sql = "SELECT * FROM tasks t " +
+                    "WHERE t.userid = :userid " +
+                    "AND CURRENT_DATE > t.deadline - make_interval(hours => :hours)";
+
+            return con.createQuery(sql)
                     .addParameter("userid", userid)
                     .addParameter("hours", hours)
                     .executeAndFetch(Task.class);
         }
     }
+
 }

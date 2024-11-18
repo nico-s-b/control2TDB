@@ -14,6 +14,5 @@ public interface TaskRepository {
     void delete(Task task);
     List<Task> findByState(Long userId, Boolean state);
     List<Task> findByKeyword(Long userId, String keyword);
-    Task changeState(Task task);
     List<Task> findByFinishingDeadline(Long userId, int hours);
 }
