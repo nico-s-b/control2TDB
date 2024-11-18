@@ -55,22 +55,28 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public Task update(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            return con.createQuery("UPDATE tasks SET title=: title, description= :description, deadline= :deadline, status= :status WHERE taskid= :taskid")
+            con.createQuery("UPDATE tasks SET title=:title, description=:description, deadline=:deadline, status=:status, userid=:userid WHERE taskid=:taskid")
                     .addParameter("taskid", task.getTaskid())
                     .addParameter("title", task.getTitle())
                     .addParameter("description", task.getDescription())
                     .addParameter("deadline", task.getDeadline())
                     .addParameter("status", task.getStatus())
+                    .addParameter("userid", task.getUserid())
+                    .executeUpdate();
+
+            // Realiza una consulta para devolver el objeto actualizado
+            return con.createQuery("SELECT * FROM tasks WHERE taskid = :taskid")
+                    .addParameter("taskid", task.getTaskid())
                     .executeAndFetchFirst(Task.class);
         }
     }
 
     @Override
-    public Task delete(Task task) {
+    public void delete(Task task) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            return con.createQuery("DELETE from tasks WHERE taskid= :taskid")
+            con.createQuery("DELETE from tasks WHERE taskid= :taskid")
                     .addParameter("taskid",task.getTaskid())
-                    .executeAndFetchFirst(Task.class);
+                    .executeUpdate();
         }
     }
 

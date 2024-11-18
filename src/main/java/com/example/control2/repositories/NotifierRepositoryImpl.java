@@ -1,12 +1,9 @@
 package com.example.control2.repositories;
 
 import com.example.control2.models.Notifier;
-import com.example.control2.models.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
-
-import java.util.List;
 
 @Repository
 public class NotifierRepositoryImpl implements NotifierRepository{
@@ -37,10 +34,11 @@ public class NotifierRepositoryImpl implements NotifierRepository{
     @Override
     public void update(Notifier notifier) {
         try (org.sql2o.Connection con = sql2o.open()) {
-            con.createQuery("INSERT INTO notifiers (amount, timeunit, enabled) VALUES (:amount, :timeunit, :enabled)")
+            con.createQuery("UPDATE notifiers SET amount = :amount, timeunit = :timeunit, enabled = :enabled WHERE userid = :userid")
                     .addParameter("amount", notifier.getAmount())
                     .addParameter("timeunit", notifier.getTimeunit())
                     .addParameter("enabled", notifier.isEnabled())
+                    .addParameter("userid", notifier.getUserid())
                     .executeUpdate();
         }
     }

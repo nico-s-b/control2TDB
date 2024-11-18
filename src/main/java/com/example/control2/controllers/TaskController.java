@@ -3,6 +3,7 @@ package com.example.control2.controllers;
 import com.example.control2.models.Task;
 import com.example.control2.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,12 +38,14 @@ public class TaskController {
 
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Task> deleteTask(@RequestBody Task task) {
-        Task deletedTask = taskService.deleteTask(task);
-        if (deletedTask == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<String> deleteTask(@RequestBody Task task) {
+        try{
+            taskService.deleteTask(task);
+            return ResponseEntity.ok("Tarea eliminada con éxito");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la tarea");
         }
-        return ResponseEntity.ok(deletedTask);
+
     }
 
     @PutMapping("/state")
@@ -79,6 +82,24 @@ public class TaskController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(task);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Task> updateTask(@RequestBody Task task) {
+        try {
+            // Actualiza la tarea usando el repositorio
+            Task updatedTask = taskService.updateTask(task);
+            System.out.println(updatedTask);
+            if (updatedTask != null) {
+                return ResponseEntity.ok(updatedTask);
+            } else {
+                // Si no se pudo actualizar (por ejemplo, no existe), responde con 404
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            // Manejo de errores generales
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 }

@@ -11,7 +11,7 @@ public interface TaskRepository {
     List<Task> findByUser(Long userid);
     Task save(Task task);
     Task update(Task task);
-    Task delete(Task task);
+    void delete(Task task);
     List<Task> findByState(Long userId, Boolean state);
     List<Task> findByKeyword(Long userId, String keyword);
     Task changeState(Task task);
