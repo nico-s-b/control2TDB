@@ -51,27 +51,18 @@ public class TaskController {
     @GetMapping("/{userId}/tasks/status")
     public ResponseEntity<List<Task>> getTasksByStatus(@PathVariable Long userId, @RequestParam Boolean status) {
         List<Task> tasks = taskService.filterTaskByState(userId, status);
-        if (tasks.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(tasks);
     }
 
     @GetMapping("/{userId}/tasks/keyword")
     public ResponseEntity<List<Task>> getTasksByKeyword(@PathVariable Long userId, @RequestParam String keyword) {
         List<Task> tasks = taskService.searchTaskByKeyword(userId, keyword);
-        if (tasks.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(tasks);
     }
 
     @GetMapping("/{userId}/tasks/notify")
     public ResponseEntity<List<Task>> getTasksToNotify(@PathVariable Long userId) {
         List<Task> task = taskService.getTasktoNotify(userId);
-        if (task.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(task);
     }
 
@@ -81,17 +72,13 @@ public class TaskController {
             if (task.getTaskid() == null || !task.getTaskid().equals(id)) {
                 return ResponseEntity.badRequest().build();
             }
-            // Actualizar la tarea utilizando el servicio
             Task updatedTask = taskService.updateTask(task);
 
-            // Si no se pudo actualizar (por ejemplo, no existe), responde con 404
             if (updatedTask == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-
-            return ResponseEntity.ok(updatedTask); // 200 OK con la tarea actualizada
+            return ResponseEntity.ok(updatedTask);
         } catch (Exception e) {
-            // Manejo de errores generales
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
